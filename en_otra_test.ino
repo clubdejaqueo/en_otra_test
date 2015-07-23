@@ -67,7 +67,7 @@ class Motor {
     }
     
     void loop() {
-      if ((tiempo_proximo_paso-millis()) < 0) {
+      if ((tiempo_proximo_paso-millis()) <= 0) {
         int velocidad = programas[contador_programa++];
         cambiar_velocidad(velocidad);
 
