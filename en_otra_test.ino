@@ -85,6 +85,7 @@ class Motor {
 };
 
 Motor motores[] = {
+  // pin_pwm, pin_A, pin_B, delay_min, delay_max
   {5, 6, 7, 500, 4000},
   {8, 9, 10, 500, 4000},
 };
