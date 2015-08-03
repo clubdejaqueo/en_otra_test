@@ -1,19 +1,18 @@
-const int tiron = 250;
-const int afloje = 2600;
+const int tiempo_tiron = 250;
+const int tiempo_afloje = 2600;
 const int tiempo_variable = -1;
 
 const int velMin = -60;
 const int velMax = 255;
 const int velZero = 0;
 
-#define array_size(foo) (sizeof(foo)/sizeof(foo[0]))
-
 const int programas[] = {
-    velMax, tiron,
-    velMin, afloje,
-    velZero, tiempo_variable,
+  velMax, tiempo_tiron,
+  velMin, tiempo_afloje,
+  velZero, tiempo_variable,
 };
 
+#define array_size(foo) (sizeof(foo)/sizeof(foo[0]))
 const byte len_programas = array_size(programas);
 
 class Motor {
@@ -32,13 +31,13 @@ class Motor {
       pinMode(pin_A, OUTPUT);
       pinMode(pin_B, OUTPUT);
     }
-    
+
     void avanzar(int velocidad) {
       analogWrite(pin_pwm, velocidad);
       digitalWrite(pin_A, HIGH);
       digitalWrite(pin_B, LOW);
     }
-    
+
     void retroceder(int velocidad) {
       analogWrite(pin_pwm, velocidad);
       digitalWrite(pin_A, LOW);
@@ -49,7 +48,7 @@ class Motor {
       digitalWrite(pin_A, LOW);
       digitalWrite(pin_B, LOW);
     }
-    
+
     void cambiar_velocidad(int vel) {
       if (vel == velZero) {
         frenar();
@@ -61,13 +60,13 @@ class Motor {
         retroceder(abs(vel));
       }
     }
-    
+
     int calcular_tiempo_variable() {
       return random(delay_min, delay_max);
     }
-    
+
     void loop() {
-      if ((tiempo_proximo_paso-millis()) <= 0) {
+      if ((tiempo_proximo_paso - millis()) <= 0) {
         int velocidad = programas[contador_programa++];
         cambiar_velocidad(velocidad);
 
@@ -76,7 +75,7 @@ class Motor {
           espera = calcular_tiempo_variable();
         }
         tiempo_proximo_paso += espera;
-        
+
         if (contador_programa > len_programas) {
           contador_programa = 0;
         }
