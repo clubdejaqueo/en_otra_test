@@ -7,28 +7,23 @@ const int velMax = 255;
 const int velZero = 0;
 
 const int programas[] = {
+  velMax, tiempo_tiron,
   velMin, tiempo_afloje,
   velZero, tiempo_variable,
-  velMax, tiempo_tiron,
 };
-
-const byte programa_reset = 0; // afloje
-const byte programa_setup = 4; // tiron (dos columnas)
 
 #define array_size(foo) (sizeof(foo)/sizeof(foo[0]))
 const byte len_programas = array_size(programas);
 
 class Motor {
-    byte pin_pwm, pin_A, pin_B, pin_sensor;
+    byte pin_pwm, pin_A, pin_B;
     int delay_min, delay_max;
-    int umbral_sensor;
     unsigned long tiempo_proximo_paso;
     byte contador_programa;
   public:
-    Motor(byte pin_pwm, byte pin_A, byte pin_B, int delay_min, int delay_max, byte pin_sensor, int umbral_sensor) :
+    Motor(byte pin_pwm, byte pin_A, byte pin_B, int delay_min, int delay_max) :
       pin_pwm(pin_pwm), pin_A(pin_A), pin_B(pin_B), delay_min(delay_min),
-      delay_max(delay_max), pin_sensor(pin_sensor), umbral_sensor(umbral_sensor),
-      tiempo_proximo_paso(millis()), contador_programa(programa_setup) {
+      delay_max(delay_max), tiempo_proximo_paso(millis()), contador_programa(0) {
     }
 
     void setup() {
@@ -69,24 +64,9 @@ class Motor {
     int calcular_tiempo_variable() {
       return random(delay_min, delay_max);
     }
-    
-    bool sensor_activado() {
-      int val = analogRead(pin_sensor);
-      if (val < umbral_sensor) {
-        return true;
-      }
-      return false;
-    }
 
     void loop() {
-      unsigned long now = millis();
-      
-      if (sensor_activado()) {
-        contador_programa = programa_reset;
-        tiempo_proximo_paso = now;
-      }
-      
-      if ((tiempo_proximo_paso - now) <= 0) {
+      if ((tiempo_proximo_paso - millis()) <= 0) {
         int velocidad = programas[contador_programa++];
         cambiar_velocidad(velocidad);
 
@@ -104,9 +84,9 @@ class Motor {
 };
 
 Motor motores[] = {
-  // pin_pwm, pin_A, pin_B, delay_min, delay_max, pin_sensor, umbral_sensor
-  {  5,       6,     7,     500,       4000,      A3,         1 },
-  {  8,       9,     10,    500,       4000,      A2,         1 },
+  // pin_pwm, pin_A, pin_B, delay_min, delay_max
+  { 5, 6, 7, 500, 4000 },
+  { 8, 9, 10, 500, 4000 },
 };
 
 const byte cantidad_motores = array_size(motores);
@@ -121,5 +101,4 @@ void loop() {
   for (int n = 0; n < cantidad_motores; n++) {
     motores[n].loop();
   }
-  delay(10);
 }
