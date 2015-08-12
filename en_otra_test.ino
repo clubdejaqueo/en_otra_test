@@ -15,9 +15,19 @@ const int programa1[] = {
 };
 
 const int programa2[] = {
-  velMax, tiempo_tiron,
-  velMin, tiempo_afloje,
-  velZero, tiempo_variable,
+  200, 2100,
+  -170, 1200,
+  0, tiempo_variable,
+  
+  200, 2100,
+  -200, 1000,
+  
+  200, 2100,
+  -200, 2100,
+  
+  -170, 1200,
+  170, 1200,
+  
   FIN_PROGRAMA
 };
 
@@ -109,7 +119,7 @@ class Motor {
 Motor motores[] = {
   // pin_pwm, pin_A, pin_B, delay_min, delay_max
   { 5, 6, 7, 500, 4000, programa1 },
-  { 8, 9, 10, 500, 4000, programa2 },
+  { 3, 2, 4, 500, 4000, programa2 },
 };
 
 const byte cantidad_motores = array_size(motores);
